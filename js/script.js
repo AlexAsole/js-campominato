@@ -1,49 +1,59 @@
-// Il computer deve generare 16 numeri casuali tra 1 e 100.
 function randomStuff(min, max){
   var pcNumber = Math.floor(Math.random() * (max + 1 - min) + min);
   return pcNumber;
 }
-function check (arr, us, t){
-  if (t === arr.length){
+function check (arr, us, t){ // controllo base, alcune cose non sono riuscito a farle funzionare qui e le ho messe fuori
+  if (t === arr.length){ // se raggiungi il numero necessario hai vinto e si blocca
     alert('Hai Vinto! Sei riuscito a fare ' + t + ' punti!')
     return false
-  } else if (arr.indexOf(us) !== -1) {
+  } else if (arr.indexOf(us) !== -1) { //se inserisci un numero presente hai perso e si blocca
     alert('Hai Perso! Sei riuscito a fare ' + t + ' punti!')
     return false
-  } else {
+  } else { // se le due sopra non si verificano va avanti tranquillo
     return true
   }
-
 }
+var min = 1;
+var max = 100;
+var long = 16;
+var btn = document.getElementById('play');
 var pcArray = [];
 var userArray = [];
 var number;
-var userN;
 var times;
 
-while (pcArray.length < 16) {
-  number = randomStuff(1, 100);
+// Il computer deve generare 16 numeri casuali tra 1 e 100, non ripetuti
+while (pcArray.length < long) {
+  number = randomStuff(min, max);
   if (pcArray.indexOf(number) === -1){
     pcArray.push(number);
   }
 }
-pcArray.sort()
-console.log(pcArray)
+pcArray.sort(function(a, b){return a - b}); // ordina l'array in ordine crescente
+console.log(pcArray); //mi serve per barar...controllare, assolutamente controllare!
 
 // In seguito deve chiedere all’utente (100 - 16) volte di inserire un numero alla volta, sempre compreso tra 1 e 100.
-times = -1;
-while (check(pcArray, userN, times)) {
-  userN = parseInt(prompt('inserisci un numero da 1 a 100!'));
-  if (!isNaN(userN)){
-    if (userArray.indexOf(userN) === -1){
-      userArray.push(userN)
-    } else {
-      alert('Hai perso, non puoi inserire due volte lo stesso numero!');
+btn.addEventListener('click', function(){
+  userArray = [];
+  times = -1;
+  while (check(pcArray, userN, times)) {
+   var userN = parseInt(prompt('inserisci un numero da 1 a 100!'));
+    if (!isNaN(userN)){ //se è un numero va avanti tranquillo
+      if ((userN < 1) || (userN > 100)){ //se non è compreso tra 1 e 100 ti blocca
+        alert('Hai perso, non puoi inserire numeri più piccoli di 1 o più grandi di 100!')
+        break;
+      } else { //se è compreso tra 1 e 100 va avanti tranquillo
+        if (userArray.indexOf(userN) === -1){ // se non hai già inserito questo numero, vai avanti tranquillo
+          userArray.push(userN)
+          times++;
+        } else { // se hai già inserito questo numero ti blocca
+          alert('Hai perso, non puoi inserire due volte lo stesso numero!');
+          break;
+        }
+      }
+    } else { // se non è un numero ti blocca
+      alert('Questo non è neanche un numero, prendi in giro?')
       break;
     }
-    times++;
-  } else {
-    alert('Questo non è neanche un numero, prendi in giro?')
-    break;
   }
-}
+})
