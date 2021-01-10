@@ -14,33 +14,50 @@ function check (arr, us, t){ // controllo base, alcune cose non sono riuscito a 
   }
 }
 var min = 1;
-var max = 100;
+var max
 var long = 16;
 var btn = document.getElementById('play');
-var pcArray = [];
-var userArray = [];
+var pcArray;
+var userArray;
 var number;
 var times;
 
-// Il computer deve generare 16 numeri casuali tra 1 e 100, non ripetuti
-while (pcArray.length < long) {
-  number = randomStuff(min, max);
-  if (pcArray.indexOf(number) === -1){
-    pcArray.push(number);
-  }
-}
-pcArray.sort(function(a, b){return a - b}); // ordina l'array in ordine crescente
-console.log(pcArray); //mi serve per barar...controllare, assolutamente controllare!
+
 
 // In seguito deve chiedere all’utente (100 - 16) volte di inserire un numero alla volta, sempre compreso tra 1 e 100.
 btn.addEventListener('click', function(){
+  switch (prompt('Scegli la difficoltà: facile, medio, difficile! (default è facile)')) {
+    case 'facile':
+      max = 100;
+      break;
+    case 'medio':
+      max = 80;
+      break;
+    case 'difficile':
+      max = 50;
+      break;
+    default:
+      max = 100;
+      break;
+
+  }
+  // Il computer deve generare 16 numeri casuali tra 1 e 100, non ripetuti
+  pcArray = [];
+  while (pcArray.length < long) {
+    number = randomStuff(min, max);
+    if (pcArray.indexOf(number) === -1){
+      pcArray.push(number);
+    }
+  }
+  pcArray.sort(function(a, b){return a - b}); // ordina l'array in ordine crescente
+  console.log(pcArray); //mi serve per barar...controllare, assolutamente controllare!
   userArray = [];
   times = -1;
   while (check(pcArray, userN, times)) {
-   var userN = parseInt(prompt('inserisci un numero da 1 a 100!'));
+   var userN = parseInt(prompt('inserisci un numero da ' + min + ' a ' + max + '!'));
     if (!isNaN(userN)){ //se è un numero va avanti tranquillo
-      if ((userN < 1) || (userN > 100)){ //se non è compreso tra 1 e 100 ti blocca
-        alert('Hai perso, non puoi inserire numeri più piccoli di 1 o più grandi di 100!')
+      if ((userN < min) || (userN > max)){ //se non è compreso tra 1 e 100 ti blocca
+        alert('Hai perso, non puoi inserire numeri più piccoli di ' + min + ' o più grandi di ' + max + '!')
         break;
       } else { //se è compreso tra 1 e 100 va avanti tranquillo
         if (userArray.indexOf(userN) === -1){ // se non hai già inserito questo numero, vai avanti tranquillo
