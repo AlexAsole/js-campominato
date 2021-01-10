@@ -24,9 +24,8 @@ var times;
 
 
 
-// In seguito deve chiedere all’utente (100 - 16) volte di inserire un numero alla volta, sempre compreso tra 1 e 100.
 btn.addEventListener('click', function(){
-  switch (prompt('Scegli la difficoltà: facile, medio, difficile! (default è facile)')) {
+  switch (prompt('Scegli la difficoltà: facile, medio, difficile! (default è facile)')) { //scelta diffoltà
     case 'facile':
       max = 100;
       break;
@@ -36,7 +35,7 @@ btn.addEventListener('click', function(){
     case 'difficile':
       max = 50;
       break;
-    default:
+    default: 
       max = 100;
       break;
 
@@ -54,7 +53,7 @@ btn.addEventListener('click', function(){
   userArray = [];
   times = -1;
   while (check(pcArray, userN, times)) {
-   var userN = parseInt(prompt('inserisci un numero da ' + min + ' a ' + max + '!'));
+   var userN = parseInt(prompt('inserisci un numero da ' + min + ' a ' + max + '!')); // chiede un numero compreso tra min e max
     if (!isNaN(userN)){ //se è un numero va avanti tranquillo
       if ((userN < min) || (userN > max)){ //se non è compreso tra 1 e 100 ti blocca
         alert('Hai perso, non puoi inserire numeri più piccoli di ' + min + ' o più grandi di ' + max + '!')
