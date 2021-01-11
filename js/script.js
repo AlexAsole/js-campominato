@@ -1,31 +1,44 @@
-function randomStuff(min, max){
+function randomStuff(min, max){ // funzione numeri casuali
   var pcNumber = Math.floor(Math.random() * (max + 1 - min) + min);
   return pcNumber;
 }
-function check (arr, us, t){ // controllo base, alcune cose non sono riuscito a farle funzionare qui e le ho messe fuori
-  if (t === arr.length){ // se raggiungi il numero necessario hai vinto e si blocca
-    alert('Hai Vinto! Sei riuscito a fare ' + t + ' punti!')
+
+function check (arr, us){ // funzione controllo numero incluso
+  if (arr.indexOf(us) !== -1) {
     return false
-  } else if (arr.indexOf(us) !== -1) { //se inserisci un numero presente hai perso e si blocca
-    alert('Hai Perso! Sei riuscito a fare ' + t + ' punti!')
-    return false
-  } else { // se le due sopra non si verificano va avanti tranquillo
-    return true
   }
+  return true
 }
-var min = 1;
-var max
-var long = 16;
+
+function InCheck(us, n, m){ // funzione controllo input valido
+  if (isNaN(us)) {
+    return false
+  }
+  if (us < n || us > m) {
+    return false
+  }
+  return true
+}
+
 var btn = document.getElementById('play');
+var min = 1;
+var max;
+var long = 16;
 var pcArray;
 var userArray;
 var number;
-var times;
+var userN;
+var perfect;
 
 
 
 btn.addEventListener('click', function(){
-  switch (prompt('Scegli la difficoltà: facile, medio, difficile! (default è facile)')) { //scelta diffoltà
+  max;
+  pcArray = [];
+  perfect;
+  userArray = [];
+  userN;
+  switch (prompt('Scegli la difficoltà: facile, medio, difficile!')) { //scelta diffoltà
     case 'facile':
       max = 100;
       break;
@@ -35,13 +48,12 @@ btn.addEventListener('click', function(){
     case 'difficile':
       max = 50;
       break;
-    default: 
-      max = 100;
+    default:
+      max = 20;
       break;
 
   }
   // Il computer deve generare 16 numeri casuali tra 1 e 100, non ripetuti
-  pcArray = [];
   while (pcArray.length < long) {
     number = randomStuff(min, max);
     if (pcArray.indexOf(number) === -1){
@@ -50,26 +62,25 @@ btn.addEventListener('click', function(){
   }
   pcArray.sort(function(a, b){return a - b}); // ordina l'array in ordine crescente
   console.log(pcArray); //mi serve per barar...controllare, assolutamente controllare!
-  userArray = [];
-  times = -1;
-  while (check(pcArray, userN, times)) {
-   var userN = parseInt(prompt('inserisci un numero da ' + min + ' a ' + max + '!')); // chiede un numero compreso tra min e max
-    if (!isNaN(userN)){ //se è un numero va avanti tranquillo
-      if ((userN < min) || (userN > max)){ //se non è compreso tra 1 e 100 ti blocca
-        alert('Hai perso, non puoi inserire numeri più piccoli di ' + min + ' o più grandi di ' + max + '!')
-        break;
-      } else { //se è compreso tra 1 e 100 va avanti tranquillo
-        if (userArray.indexOf(userN) === -1){ // se non hai già inserito questo numero, vai avanti tranquillo
-          userArray.push(userN)
-          times++;
-        } else { // se hai già inserito questo numero ti blocca
-          alert('Hai perso, non puoi inserire due volte lo stesso numero!');
-          break;
+  perfect = max - pcArray.length;
+  while (check(pcArray, userN) && userArray.length < perfect) { // finchè il numero inserito o
+                                                                // la lunghezza dell'array è inferiore
+                                                                // al massimo consentito vai avanti
+    userN = parseInt(prompt('inserisci un numero da ' + min + ' a ' + max + '!'));
+    if (InCheck(userN, min, max)){ // se è un numero va avanti
+      if(userArray.indexOf(userN) !== -1){ // se hai già inserito il numero ti blocca e riparti
+        alert('Questo numero lo hai già inserito!')
+      } else { // se non hai già inserito il numero vai avanti
+        if(check(pcArray, userN) === false){ // se scrivi un  numero compreso nell'array ti blocca
+          alert('Hai perso! Hai fatto '+ userArray.length + ' punti!' )
+        }
+        userArray.push(userN)
+        if(userArray.length === perfect){ // se l'array utente ha raggiunto il massimo consentito hai vinto
+          alert('Hai vinto! Hai fatto '+ userArray.length + ' punti!' )
         }
       }
-    } else { // se non è un numero ti blocca
-      alert('Questo non è neanche un numero, prendi in giro?')
-      break;
+    } else { // se non è un numero o un numero non compreso nell'intervallo min-max ti blocca e riparte
+      alert('Lo ripeto, devi scrivere UN numero da ' + min + ' a ' + max +'!')
     }
   }
 })
