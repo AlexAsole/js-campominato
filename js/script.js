@@ -33,11 +33,11 @@ var perfect;
 
 
 btn.addEventListener('click', function(){
-  max;
+  max = 0;
   pcArray = [];
-  perfect;
+  perfect = 0;
   userArray = [];
-  userN;
+  userN = 0;
   switch (prompt('Scegli la difficoltà: facile, medio, difficile!')) { //scelta diffoltà
     case 'facile':
       max = 100;
